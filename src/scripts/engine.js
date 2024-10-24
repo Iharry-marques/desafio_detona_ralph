@@ -58,6 +58,28 @@ function addListenerHitBox() {
   });
 }
 
+// Previne comportamentos indesejados de toque em dispositivos móveis
+document.addEventListener('touchmove', function(e) {
+  e.preventDefault();
+}, { passive: false });
+
+// Adapta o evento de clique para dispositivos móveis
+function addListenerHitBox() {
+  state.view.squares.forEach((square) => {
+      ['mousedown', 'touchstart'].forEach(eventName => {
+          square.addEventListener(eventName, (e) => {
+              e.preventDefault(); // Previne comportamento padrão em dispositivos móveis
+              if (square.id === state.values.hitPosition) {
+                  state.values.result++;
+                  state.view.score.textContent = state.values.result;
+                  state.values.hitPosition = null;
+                  playSound("hit");
+              }
+          });
+      });
+  });
+}
+
 function init() {
   addListenerHitBox();
 }
